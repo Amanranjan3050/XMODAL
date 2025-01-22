@@ -16,11 +16,7 @@ function App() {
   };
 
   const validateForm = () => {
-    const { username, email, phone, dob } = formData;
-    if (!username.trim()) {
-      alert("Username cannot be empty.");
-      return false;
-    }
+    const { email, phone, dob } = formData;
     if (!email.includes("@") || !email.includes(".")) {
       alert("Invalid email address.");
       return false;
@@ -39,27 +35,21 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      alert(`Form Submitted Successfully:
-        Username: ${formData.username}
-        Email: ${formData.email}
-        Phone: ${formData.phone}
-        DOB: ${formData.dob}`);
+      alert("Form submitted successfully!");
+      setIsOpen(false); // Close the modal after submission
       setFormData({ username: "", email: "", phone: "", dob: "" });
     }
   };
 
   const closeHandler = (e) => {
     if (e.target.className === "modal") {
-      // Only close the modal if the modal background (not the content) is clicked
+      // Close modal when clicking outside the modal content
       setIsOpen(false);
     }
   };
 
   return (
-    <div
-      className="app"
-      style={isOpen ? { backgroundColor: "rgba(0, 0, 0, 0.3)" } : {}}
-    >
+    <div id="root" className="app">
       <div>
         <h1>User Details Modal</h1>
         <button onClick={() => setIsOpen(true)}>Open Form</button>
