@@ -15,52 +15,42 @@ function App() {
     setFormData({ ...formData, [id]: value });
   };
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const validateForm = () => {
     const { username, email, phone, dob } = formData;
-
-    // Validate username
     if (!username.trim()) {
-      alert("Username is required.");
+      alert("Username cannot be empty.");
       return false;
     }
-
-    // Validate email
-    if (!validateEmail(email)) {
+    if (!email.includes("@") || !email.includes(".")) {
       alert("Invalid email address.");
       return false;
     }
-
-    // Validate phone number
     if (phone.length !== 10 || isNaN(phone)) {
       alert("Invalid phone number. Please enter a 10-digit phone number.");
       return false;
     }
-
-    // Validate date of birth
     if (new Date(dob).getTime() > Date.now()) {
       alert("Invalid date of birth. Date of birth cannot be in the future.");
       return false;
     }
-
     return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      alert("Form submitted successfully!");
+      alert(`Form Submitted Successfully:
+        Username: ${formData.username}
+        Email: ${formData.email}
+        Phone: ${formData.phone}
+        DOB: ${formData.dob}`);
       setFormData({ username: "", email: "", phone: "", dob: "" });
-      setIsOpen(false);
     }
   };
 
   const closeHandler = (e) => {
-    if (e.target === e.currentTarget) {
+    if (e.target.className === "modal") {
+      // Only close the modal if the modal background (not the content) is clicked
       setIsOpen(false);
     }
   };
@@ -68,8 +58,6 @@ function App() {
   return (
     <div
       className="app"
-      data-testid="app-div"
-      onClick={closeHandler}
       style={isOpen ? { backgroundColor: "rgba(0, 0, 0, 0.3)" } : {}}
     >
       <div>
@@ -77,7 +65,7 @@ function App() {
         <button onClick={() => setIsOpen(true)}>Open Form</button>
         {isOpen && (
           <div className="modal" onClick={closeHandler}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content">
               <h2>Fill Details</h2>
               <form onSubmit={handleSubmit}>
                 <label>
